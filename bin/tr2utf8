@@ -1,0 +1,182 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const path = require('path'),
+    yargs = require('yargs'),
+    updateNotifier = require('update-notifier'),
+    turkishCharEncoding = require('turkish-char-encoding'),
+    pkg = require('../package.json');
+
+let exitCode = 0;
+
+process.on('uncaughtException', function (err) {
+    console.error(err.stack);
+    exitCode = 1;
+});
+
+process.on('exit', function () {
+    process.exit(exitCode);
+});
+
+updateNotifier({ pkg: pkg })
+    .notify({ defer: false });
+
+const locateSeyFile = function (file) {
+    if (file === undefined) {
+        return path.join(process.cwd(), 'seyfile.js');
+    }
+
+    if (!path.isAbsolute(file)) {
+        return path.join(process.cwd(), file);
+    }
+
+    return file;
+};
+
+const initCmdR = function (argv) {
+    const seyfile = locateSeyFile(argv.f);
+    sey.initFile(seyfile, argv.a, argv.o);
+};
+
+const initCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 init [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified seyfile',
+                type: 'string'
+            }
+        )
+        .option(
+            'a',
+            {
+                alias: 'api',
+                describe: 'prefer api template',
+                type: 'boolean'
+            }
+        )
+        .option(
+            'o',
+            {
+                alias: 'override',
+                describe: 'overwrites existing files',
+                type: 'boolean'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    initCmdR(argv);
+};
+
+const cleanCmdR = function (argv) {
+    sey.clean();
+};
+
+const cleanCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 clean')
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    cleanCmdR(argv);
+};
+
+const selfCheckCmdR = function (argv) {
+    sey.selfCheck();
+};
+
+const selfCheckCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 self-check')
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    selfCheckCmdR(argv);
+};
+
+const buildCmdR = function (argv) {
+    const seyfile = locateSeyFile(argv.f);
+
+    let options = {};
+    if (argv._.length >= 2) {
+        options.bundle = argv._[1];
+    }
+
+    global.sey = sey;
+    global.sey.setOptions(options);
+
+    require(seyfile);
+};
+
+const buildCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 build [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified seyfile',
+                type: 'string'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    buildCmdR(argv);
+};
+
+const rebuildCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 rebuild [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified seyfile',
+                type: 'string'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    cleanCmdR(argv);
+    buildCmdR(argv);
+};
+
+const completionCmd = function (args) {
+    args.showCompletionScript();
+};
+
+yargs
+    .usage('Usage: $0 <file> [options]')
+    .version(pkg.version)
+    .demand(1, 'must provide a filename')
+    .alias('v', 'version')
+    .help('h')
+    .alias('h', 'help')
+    .example('$0 source.txt', 'Converts source.txt into utf-8')
+    .example('$0 source.txt --bom', 'Converts source.txt into utf-8 with BOM (byte order mark)')
+    .example('$0 source.txt --target target.txt', 'Reads from source.txt, writes utf-8 converted version as target.txt')
+    .example('$0 source.txt --encoding ISO-8859-9', 'Converts ISO-8859-9 encoded source.txt into utf-8')
+    // .completion('completion', function (current, argv) {
+    //     return [ 'init', 'clean', 'self-check', 'build', 'rebuild' ];
+    // })
+    .argv;
+
+var str = encoder('win-1254').toUTF8('ÖöÇçŞşİıĞğÜü');
+

@@ -1,0 +1,53 @@
+{
+  "name": "tr2utf8",
+  "version": "0.0.1",
+  "description": "Simple tool to convert turkish-encoded files into utf-8 encoded ones.",
+  "keywords": [
+    "turkish",
+    "encoder",
+    "codepage",
+    "windows-1254",
+    "iso-8859-9",
+    "latin5"
+  ],
+  "engines": {
+    "node": ">=5.2.0"
+  },
+  "author": {
+    "name": "Eser Ozvataf",
+    "url": "http://eser.ozvataf.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/eserozvataf/tr2utf8/issues",
+    "email": "eser@ozvataf.com"
+  },
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Eser Ozvataf",
+      "email": "eser@ozvataf.com",
+      "url": "http://eser.ozvataf.com/"
+    }
+  ],
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eserozvataf/tr2utf8.git"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "turkish-char-encoding": "0.0.5",
+    "update-notifier": "^0.7.0",
+    "yargs": "^4.7.1"
+  },
+  "scripts": {
+    "start": "./bin/tr2utf8",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "tr2utf8": "./bin/tr2utf8"
+  }
+}
