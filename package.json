@@ -1,6 +1,6 @@
 {
   "name": "tr2utf8",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple tool to convert turkish-encoded files into utf-8 encoded ones.",
   "keywords": [
     "turkish",
