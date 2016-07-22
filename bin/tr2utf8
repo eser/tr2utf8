@@ -2,11 +2,9 @@
 
 'use strict';
 
-const path = require('path'),
-    fs = require('fs'),
+const tr2utf8 = require('../lib'),
     yargs = require('yargs'),
     updateNotifier = require('update-notifier'),
-    turkishCharEncoding = require('turkish-char-encoding'),
     pkg = require('../package.json');
 
 let exitCode = 0;
@@ -24,17 +22,13 @@ updateNotifier({ pkg: pkg })
     .notify({ defer: false });
 
 const argv = yargs
-    .usage('Usage: $0 <file> [options]')
+    .usage('Usage: $0 <path> [options]')
     .version(pkg.version)
-    .demand(1, 'must provide a filename')
+    .demand(1, 'must provide a path')
     .option('bom', {
         alias: 'b',
         describe: 'write byte order mark to beginning of the file',
         default: false
-    })
-    .option('target', {
-        alias: 't',
-        describe: 'set target file'
     })
     .option('encoding', {
         alias: 'e',
@@ -42,47 +36,21 @@ const argv = yargs
         default: 'win-1254',
         choices: ['win-1254', 'iso-8859-9', 'iso-8859-1']
     })
+    .option('includeBinaries', {
+        alias: 'ib',
+        describe: 'include binary files',
+        default: false
+    })
     .alias('v', 'version')
     .help('h')
     .alias('h', 'help')
     .example('$0 source.txt', 'Converts source.txt into utf-8')
     .example('$0 source.txt --bom', 'Converts source.txt into utf-8 with BOM (byte order mark)')
-    .example('$0 source.txt --target target.txt', 'Reads from source.txt, writes utf-8 converted version as target.txt')
     .example('$0 source.txt --encoding iso-8859-9', 'Converts ISO-8859-9 encoded source.txt into utf-8')
     .argv;
 
-const sourceFile = argv._[0],
-    targetFile = argv.target || sourceFile;
+const sourcePath = argv._[0],
+    options = argv;
 
-const content = fs.readFileSync(sourceFile, 'binary');
-
-const convertedContent = ((argv.bom) ? '\ufeff' : '') +
-    turkishCharEncoding(argv.encoding).toUTF8(content);
-
-fs.writeFileSync(targetFile, convertedContent, { encoding: 'utf-8' });
-
-/*
-const readableStream = fs.createReadStream(sourceFile, { encoding: 'binary' }),
-    writableStream = fs.createWriteStream(targetFile, { defaultEncoding: 'utf-8' });
-
-readableStream
-    .pipe(
-        through2(
-            function (chunk, encoding, callback) {
-                this.push(turkishCharEncoding(argv.encoding).toUTF8(chunk));
-
-                callback();
-            },
-            function (callback) {
-                if (argv.bom) {
-                    this.push('\ufeff');
-                }
-
-                callback();
-            }
-        )
-    )
-    .pipe(writableStream);
-*/
-
+tr2utf8(sourcePath, options);
 console.log('done.');

@@ -1,6 +1,6 @@
 {
   "name": "tr2utf8",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple tool to convert turkish-encoded files into utf-8 encoded ones.",
   "keywords": [
     "turkish",
@@ -29,6 +29,7 @@
       "url": "http://eser.ozvataf.com/"
     }
   ],
+  "main": "lib/index.js",
   "preferGlobal": true,
   "repository": {
     "type": "git",
@@ -36,9 +37,11 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "glob-all": "^3.0.3",
+    "isbinaryfile": "^3.0.0",
     "turkish-char-encoding": "0.0.5",
-    "update-notifier": "^0.7.0",
-    "yargs": "^4.7.1"
+    "update-notifier": "^1.0.2",
+    "yargs": "^4.8.1"
   },
   "scripts": {
     "start": "./bin/tr2utf8",
