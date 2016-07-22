@@ -11,6 +11,5 @@ npm install -g tr2utf8
 ```sh
 tr2utf8 source.txt
 tr2utf8 source.txt --bom # with bom
-tr2utf8 source.txt --target target.txt # save as another file
 tr2utf8 source.txt --encoding iso-8859-9 # different encoding than Windows-1254
 ```

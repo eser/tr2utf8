@@ -41,7 +41,12 @@ const argv = yargs
         describe: 'include binary files',
         default: false
     })
-    .alias('v', 'version')
+    .option('verbose', {
+        alias: 'v',
+        describe: 'verbose',
+        default: true
+    })
+    // .alias('v', 'version')
     .help('h')
     .alias('h', 'help')
     .example('$0 source.txt', 'Converts source.txt into utf-8')
