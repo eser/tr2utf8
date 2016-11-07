@@ -1,6 +1,6 @@
 {
   "name": "tr2utf8",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple tool to convert turkish-encoded files into utf-8 encoded ones.",
   "keywords": [
     "turkish",
@@ -41,14 +41,15 @@
     "isbinaryfile": "^3.0.0",
     "turkish-char-encoding": "0.0.5",
     "update-notifier": "^1.0.2",
-    "yargs": "^4.8.1"
+    "yargs": "^6.3.0"
   },
   "scripts": {
     "start": "./bin/tr2utf8",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "bin"
+    "bin",
+    "lib"
   ],
   "bin": {
     "tr2utf8": "./bin/tr2utf8"
